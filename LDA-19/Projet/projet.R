@@ -69,10 +69,14 @@ credit.cart.p=credit.cart.prob
 credit.cart.p[credit.cart.prob>.5]=1
 credit.cart.p[credit.cart.prob<=.5]=0
 confusionMatrix(as.factor(credit.cart.p),as.factor(credit.test$Class))
+mean(credit.cart.p!=credit.test$Class)
+#0.0005178982
 sum(credit.cart.p[credit.test$Class==1]!=credit.test$Class[credit.test$Class==1])/length(credit.cart.p[credit.test$Class==1])
 #0.207
 roc.curve(as.factor(credit.cart.p),as.factor(credit.test$Class))
+#0.955
 
+#Regression Logistique
 library(nnet)
 credit.RL <- multinom(Class~., data=credit.train)
 credit.RL.p1=predict(credit.RL,credit.test)
@@ -102,6 +106,8 @@ roc.curve(credit.bayes.p,test.label)
 #0.534
 sum(credit.bayes.p[test.label==1]!=test.label[test.label==1])/length(credit.bayes.p[test.label==1])
 #0.111
+mean(credit.bayes.p!=test.label)
+#0.02
 
 ###random forest
 library(randomForest)
@@ -254,9 +260,9 @@ confusionMatrix(rose.bayes.p,test.label)
 #         1  11 385
 mean(rose.bayes.p!=rose.test$Class)
 #0.01375
-roc.curve(rose.bayes.p,test.label)
+roc.curve(rose.bayes.p,rose.test$Class)
 #0.986
-sum(rose.bayes.p[test.label==1]!=test.label[test.label==1])/length(rose.bayes.p[test.label==1])
+sum(rose.bayes.p[rose.test$Class==1]!=rose.test$Class[rose.test$Class==1])/length(rose.bayes.p[rose.test$Class==1])
 #0
 
 
@@ -273,8 +279,8 @@ roc.curve(as.factor(rose.rf.pred),as.factor(rose.test$Class))
 #0.986
 1-mean(rose.rf.pred==rose.test$Class)
 #0.013
-mean(rose.rf.pred[test.label==1]==test.label[test.label==1])
-#0.987
+1-mean(rose.rf.pred[rose.test$Class==1]==rose.test$Class[rose.test$Class==1])
+#0.01298701
 
 
 ##SVM
@@ -438,7 +444,7 @@ mean(roseSelect.RL.p1!=roseSelect.test$Class)
 #0.072
 sum(roseSelect.RL.p1[roseSelect.test$Class==1]!=roseSelect.test$Class[roseSelect.test$Class==1])/length(roseSelect.RL.p1[roseSelect.test$Class==1])
 #0.135
-roc.curve(roseSelect.RL.p1,test.label)
+roc.curve(roseSelect.RL.p1,roseSelect.test$Class)
 #0.935
 
 #Baye
